@@ -189,6 +189,16 @@
             });
         })
         .then(function (data) {
+            // Falls Plenty oder ein Proxy die Nutzdaten in "data" kapselt, automatisch entpacken.
+            if (data && data.data && typeof data.data === 'object' && !Array.isArray(data.data)) {
+                data = data.data;
+            }
+
+            // Eine erfolgreiche HTTP-Antwort ohne unsere erwarteten Felder ist kein gueltiges Ergebnis.
+            if (!data || typeof data !== 'object' || typeof data.ok === 'undefined') {
+                throw new Error('Ungueltige Antwort vom Plugin-Endpunkt: ' + JSON.stringify(data));
+            }
+
             statusBox.className = 'status ' + (data.ok ? 'ok' : 'err');
             statusBox.textContent = data.message || (data.ok ? 'Lauf abgeschlossen.' : 'Lauf mit Fehler beendet.');
             renderResult(data);
