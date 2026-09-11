@@ -2,12 +2,17 @@
   {
     "tab": "Bestseller Automatik",
     "key": "bestseller.enabled",
-    "label": "Automatik aktiv",
+    "label": "Taegliche Automatik aktiv",
     "type": "dropdown",
-    "possibleValues": {
-      "0": "Nein",
-      "1": "Ja"
-    },
+    "possibleValues": {"0": "Nein", "1": "Ja"},
+    "default": "0"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.testCronEnabled",
+    "label": "15-Minuten-Testlauf aktiv (nur voruebergehend)",
+    "type": "dropdown",
+    "possibleValues": {"0": "Nein", "1": "Ja"},
     "default": "0"
   },
   {
@@ -15,10 +20,7 @@
     "key": "bestseller.dryRun",
     "label": "Testmodus (keine Tags aendern)",
     "type": "dropdown",
-    "possibleValues": {
-      "1": "Ja",
-      "0": "Nein"
-    },
+    "possibleValues": {"1": "Ja", "0": "Nein"},
     "default": "1"
   },
   {
