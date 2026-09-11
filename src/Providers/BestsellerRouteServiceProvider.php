@@ -15,6 +15,16 @@ class BestsellerRouteServiceProvider extends RouteServiceProvider
                 'preislando-bestseller/run',
                 'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@run'
             );
+
+            $api->post(
+                'preislando-bestseller/run-test',
+                'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@runTest'
+            );
+
+            $api->post(
+                'preislando-bestseller/run-live',
+                'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@runLive'
+            );
         });
     }
 }
