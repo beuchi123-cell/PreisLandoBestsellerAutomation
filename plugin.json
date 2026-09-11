@@ -1,17 +1,11 @@
 {
   "name": "PreisLandoBestsellerAutomation",
-  "description": "Ermittelt Bestseller automatisch aus PlentyONE-Verkaufsauftraegen und pflegt den Varianten-Tag Bestseller.",
+  "description": "Ermittelt Bestseller automatisch aus PlentyONE-Verkaufsauftraegen und pflegt einen Varianten-Tag.",
   "namespace": "PreisLandoBestsellerAutomation",
   "author": "HTI-Line GmbH",
-  "type": "backend",
+  "type": "general",
   "serviceProvider": "PreisLandoBestsellerAutomation\\Providers\\BestsellerServiceProvider",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "license": "MIT",
-  "keywords": [
-    "bestseller",
-    "sales",
-    "tag",
-    "automation",
-    "plentyShop"
-  ]
+  "keywords": ["bestseller", "sales", "tag", "automation", "plentyShop"]
 }
