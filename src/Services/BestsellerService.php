@@ -54,10 +54,12 @@ class BestsellerService
      * @param bool $manual True, wenn ueber den geschuetzten REST-Endpunkt gestartet.
      * @return array
      */
-    public function run($manual = false)
+    public function run($manual = false, $dryRunOverride = null)
     {
         $enabled = $this->boolConfig('bestseller.enabled', false);
-        $dryRun = $this->boolConfig('bestseller.dryRun', true);
+        $dryRun = $dryRunOverride === null
+            ? $this->boolConfig('bestseller.dryRun', true)
+            : (bool)$dryRunOverride;
 
         if (!$enabled && !$manual) {
             return [
