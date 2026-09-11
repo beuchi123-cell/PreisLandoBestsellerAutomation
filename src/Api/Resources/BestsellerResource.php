@@ -25,7 +25,7 @@ class BestsellerResource extends Controller
         return $this->response->json([
             'ok' => true,
             'plugin' => 'PreisLandoBestsellerAutomation',
-            'version' => '0.2.4',
+            'version' => '0.2.5',
             'message' => 'REST-Verbindung zum Plugin funktioniert.'
         ], 200);
     }
@@ -49,12 +49,12 @@ class BestsellerResource extends Controller
     {
         try {
             $result = $this->service->run(true, $dryRunOverride);
-            $result['pluginVersion'] = '0.2.4';
+            $result['pluginVersion'] = '0.2.5';
             return $this->response->json($result, 200);
         } catch (\Throwable $e) {
             return $this->response->json([
                 'ok' => false,
-                'pluginVersion' => '0.2.4',
+                'pluginVersion' => '0.2.5',
                 'message' => 'Service-Fehler: ' . $e->getMessage()
             ], 500);
         }
