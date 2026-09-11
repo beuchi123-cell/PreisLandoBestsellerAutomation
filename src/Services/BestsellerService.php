@@ -51,7 +51,7 @@ class BestsellerService
     /**
      * Berechnet die Bestseller und pflegt den Tag.
      *
-     * @param bool $manual True, wenn ueber den geschuetzten REST-Endpunkt gestartet.
+     * @param bool $manual True, wenn ein erzwungener Testlauf gestartet wird.
      * @return array
      */
     public function run($manual = false, $dryRunOverride = null)
