@@ -20,27 +20,43 @@ class BestsellerResource extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Manueller Lauf entsprechend der Plugin-Einstellung "Testmodus".
-     */
+    public function ping(): Response
+    {
+        return $this->response->json([
+            'ok' => true,
+            'plugin' => 'PreisLandoBestsellerAutomation',
+            'version' => '0.2.2',
+            'message' => 'REST-Verbindung zum Plugin funktioniert.'
+        ], 200);
+    }
+
     public function run(): Response
     {
-        return $this->response->json($this->service->run(true), 200);
+        return $this->runService(null);
     }
 
-    /**
-     * Sicherer Testlauf: wertet aus, aendert aber niemals Tags.
-     */
     public function runTest(): Response
     {
-        return $this->response->json($this->service->run(true, true), 200);
+        return $this->runService(true);
     }
 
-    /**
-     * Manueller Live-Lauf: setzt und entfernt Bestseller-Tags.
-     */
     public function runLive(): Response
     {
-        return $this->response->json($this->service->run(true, false), 200);
+        return $this->runService(false);
+    }
+
+    private function runService($dryRunOverride): Response
+    {
+        try {
+            $result = $this->service->run(true, $dryRunOverride);
+            $result['pluginVersion'] = '0.2.2';
+            return $this->response->json($result, 200);
+        } catch (\Throwable $e) {
+            return $this->response->json([
+                'ok' => false,
+                'pluginVersion' => '0.2.2',
+                'message' => 'Service-Fehler: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
