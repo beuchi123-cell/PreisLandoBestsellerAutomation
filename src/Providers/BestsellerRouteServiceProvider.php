@@ -12,22 +12,22 @@ class BestsellerRouteServiceProvider extends RouteServiceProvider
     {
         $api->version(['v1'], ['middleware' => ['oauth']], function (ApiRouter $api) {
             $api->get(
-                'preislando-bestseller/v022/ping',
+                'preislando-bestseller/ping',
                 'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@ping'
             );
 
             $api->post(
-                'preislando-bestseller/v022/run',
+                'preislando-bestseller/run',
                 'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@run'
             );
 
             $api->post(
-                'preislando-bestseller/v022/run-test',
+                'preislando-bestseller/run-test',
                 'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@runTest'
             );
 
             $api->post(
-                'preislando-bestseller/v022/run-live',
+                'preislando-bestseller/run-live',
                 'PreisLandoBestsellerAutomation\\Api\\Resources\\BestsellerResource@runLive'
             );
         });
