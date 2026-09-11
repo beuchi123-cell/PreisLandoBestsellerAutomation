@@ -1,219 +1,46 @@
 <!doctype html>
 <html lang="de">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PreisLando Bestseller</title>
-    <style>
-        body { font-family: Arial, Helvetica, sans-serif; margin: 0; background: #f5f6f8; color: #24292f; }
-        .wrap { max-width: 980px; margin: 28px auto; padding: 0 18px; }
-        .card { background: #fff; border: 1px solid #d8dee4; border-radius: 8px; padding: 22px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-        h1 { margin: 0 0 8px; font-size: 24px; }
-        h2 { margin: 0 0 12px; font-size: 18px; }
-        p { line-height: 1.45; }
-        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-        button { border: 0; border-radius: 5px; padding: 11px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
-        button:disabled { opacity: .55; cursor: wait; }
-        .test { background: #e7f3ff; color: #075985; border: 1px solid #93c5fd; }
-        .live { background: #b42318; color: white; }
-        .neutral { background: #eceff3; color: #24292f; }
-        .status { padding: 12px 14px; border-radius: 5px; background: #f6f8fa; border: 1px solid #d8dee4; margin-top: 16px; white-space: pre-wrap; }
-        .ok { background: #ecfdf3; border-color: #abefc6; }
-        .err { background: #fef3f2; border-color: #fecdca; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-        th { background: #f8fafc; }
-        code { background: #f6f8fa; padding: 2px 5px; border-radius: 4px; }
-        .muted { color: #667085; font-size: 13px; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PreisLando Bestseller 0.2.4</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f5f6f8;color:#24292f}.wrap{max-width:980px;margin:28px auto;padding:0 18px}.card{background:#fff;border:1px solid #d8dee4;border-radius:8px;padding:22px;margin-bottom:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}h1{margin:0 0 6px;font-size:24px}h2{margin:0 0 12px;font-size:18px}.version{font-weight:700;color:#0969da}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}button{border:0;border-radius:5px;padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.test{background:#e7f3ff;color:#075985;border:1px solid #93c5fd}.live{background:#b42318;color:#fff}.status{padding:12px 14px;border-radius:5px;background:#f6f8fa;border:1px solid #d8dee4;margin-top:16px;white-space:pre-wrap}.ok{background:#ecfdf3;border-color:#abefc6}.err{background:#fef3f2;border-color:#fecdca}.diag{font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;background:#111827;color:#f9fafb;padding:12px;border-radius:5px;margin-top:12px}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{padding:8px 10px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:#f8fafc}.muted{color:#667085;font-size:13px}
+</style>
 </head>
 <body>
 <div class="wrap">
-    <div class="card">
-        <h1>PreisLando Bestseller Automation</h1>
-        <p>Hier kannst du die Bestseller-Auswertung jederzeit manuell starten. Die Einstellungen wie Zeitraum, Top-Anzahl, Status und Tag-Name kommen weiterhin aus der Plugin-Konfiguration.</p>
-        <div class="actions">
-            <button id="testBtn" class="test" type="button">Testlauf starten – keine Tags ändern</button>
-            <button id="liveBtn" class="live" type="button">LIVE-Lauf starten – Tags aktualisieren</button>
-        </div>
-        <p class="muted">Der Testlauf überschreibt den konfigurierten Testmodus immer sicher auf „Ja“. Der LIVE-Lauf setzt ihn für diesen manuellen Lauf auf „Nein“.</p>
-        <div id="status" class="status">Bereit.</div>
-    </div>
-
-    <div class="card" id="resultCard" style="display:none">
-        <h2>Ergebnis</h2>
-        <div id="summary"></div>
-        <div id="top"></div>
-    </div>
+<div class="card">
+<h1>PreisLando Bestseller Automation</h1>
+<div class="version">Version 0.2.4</div>
+<p>Saubere Version mit Test- und LIVE-Lauf. Die Diagnose bleibt zur Fehlersuche sichtbar.</p>
+<div id="connection" class="status">Prüfe Plugin-Verbindung …</div>
+<div class="actions">
+<button id="testBtn" class="test" type="button">Testlauf starten – keine Tags ändern</button>
+<button id="liveBtn" class="live" type="button">LIVE-Lauf starten – Tags aktualisieren</button>
 </div>
-
+<div id="status" class="status">Bereit.</div>
+</div>
+<div class="card" id="resultCard" style="display:none">
+<h2>Ergebnis</h2>
+<div id="summary"></div>
+<div id="top"></div>
+<div id="diag" class="diag" style="display:none"></div>
+</div>
+</div>
 <script>
-(function () {
-    'use strict';
-
-    var testBtn = document.getElementById('testBtn');
-    var liveBtn = document.getElementById('liveBtn');
-    var statusBox = document.getElementById('status');
-    var resultCard = document.getElementById('resultCard');
-    var summaryBox = document.getElementById('summary');
-    var topBox = document.getElementById('top');
-
-    function setBusy(busy) {
-        testBtn.disabled = busy;
-        liveBtn.disabled = busy;
-    }
-
-    function getTokenFromStorage(storage) {
-        if (!storage) return '';
-        var direct = storage.getItem('accessToken') || storage.getItem('access_token');
-        if (direct) {
-            try {
-                var parsedDirect = JSON.parse(direct);
-                if (parsedDirect && parsedDirect.accessToken) return parsedDirect.accessToken;
-                if (parsedDirect && parsedDirect.access_token) return parsedDirect.access_token;
-            } catch (ignore) {}
-            return direct.replace(/^"|"$/g, '');
-        }
-
-        for (var i = 0; i < storage.length; i++) {
-            var key = storage.key(i);
-            if (!key || key.toLowerCase().indexOf('accesstoken') === -1) continue;
-            var value = storage.getItem(key);
-            if (!value) continue;
-            try {
-                var parsed = JSON.parse(value);
-                if (parsed && parsed.accessToken) return parsed.accessToken;
-                if (parsed && parsed.access_token) return parsed.access_token;
-                if (parsed && parsed.token) return parsed.token;
-            } catch (ignore2) {}
-            if (value.length > 40) return value.replace(/^"|"$/g, '');
-        }
-        return '';
-    }
-
-    function getAccessToken() {
-        try {
-            var ownToken = getTokenFromStorage(window.localStorage);
-            if (ownToken) return ownToken;
-        } catch (e) {}
-
-        try {
-            if (window.parent && window.parent !== window) {
-                var parentToken = getTokenFromStorage(window.parent.localStorage);
-                if (parentToken) return parentToken;
-            }
-        } catch (e2) {}
-
-        return '';
-    }
-
-    function escapeHtml(value) {
-        return String(value == null ? '' : value)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    function renderResult(data) {
-        resultCard.style.display = 'block';
-        var added = Array.isArray(data.added) ? data.added : [];
-        var removed = Array.isArray(data.removed) ? data.removed : [];
-
-        summaryBox.innerHTML =
-            '<p><strong>Modus:</strong> ' + (data.dryRun ? 'TEST – keine Tags geändert' : 'LIVE – Tags aktualisiert') + '<br>' +
-            '<strong>Aufträge:</strong> ' + escapeHtml(data.ordersProcessed) + '<br>' +
-            '<strong>Positionen:</strong> ' + escapeHtml(data.positionsProcessed) + '<br>' +
-            '<strong>Varianten mit Verkäufen:</strong> ' + escapeHtml(data.variationsWithSales) + '<br>' +
-            '<strong>Top-Varianten:</strong> ' + escapeHtml(data.topCount) + '<br>' +
-            '<strong>Tag:</strong> ' + escapeHtml(data.tagName) + '<br>' +
-            '<strong>Hinzugefügt:</strong> ' + escapeHtml(added.length) + (added.length ? ' (' + escapeHtml(added.join(', ')) + ')' : '') + '<br>' +
-            '<strong>Entfernt:</strong> ' + escapeHtml(removed.length) + (removed.length ? ' (' + escapeHtml(removed.join(', ')) + ')' : '') + '</p>' +
-            '<p><strong>Meldung:</strong> ' + escapeHtml(data.message || '') + '</p>';
-
-        var top = Array.isArray(data.top) ? data.top : [];
-        if (!top.length) {
-            topBox.innerHTML = '<p>Keine Top-Varianten zurückgegeben.</p>';
-            return;
-        }
-
-        var rows = '';
-        for (var i = 0; i < top.length; i++) {
-            rows += '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(top[i].variationId) + '</td><td>' + escapeHtml(top[i].quantity) + '</td></tr>';
-        }
-        topBox.innerHTML = '<table><thead><tr><th>Platz</th><th>Varianten-ID</th><th>Verkaufte Menge</th></tr></thead><tbody>' + rows + '</tbody></table>';
-    }
-
-    function run(mode) {
-        var isLive = mode === 'live';
-        if (isLive) {
-            var confirmed = window.confirm('LIVE-Lauf wirklich starten?\n\nDabei wird der konfigurierte Bestseller-Tag an den aktuellen Top-Varianten gesetzt und bei ausgeschiedenen Varianten entfernt.');
-            if (!confirmed) return;
-        }
-
-        var token = getAccessToken();
-        if (!token) {
-            statusBox.className = 'status err';
-            statusBox.textContent = 'Kein Plenty-Backend-Zugriffstoken gefunden. Bitte die PlentyONE-Seite einmal neu laden und diese Seite erneut öffnen.';
-            return;
-        }
-
-        setBusy(true);
-        resultCard.style.display = 'none';
-        statusBox.className = 'status';
-        statusBox.textContent = isLive ? 'LIVE-Lauf läuft …' : 'Testlauf läuft …';
-
-        var path = isLive
-            ? '/rest/v1/preislando-bestseller/run-live'
-            : '/rest/v1/preislando-bestseller/run-test';
-
-        fetch(window.location.origin + path, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: '{}'
-        })
-        .then(function (response) {
-            return response.text().then(function (text) {
-                var data = {};
-                try { data = text ? JSON.parse(text) : {}; }
-                catch (e) { data = { message: text || ('HTTP ' + response.status) }; }
-                if (!response.ok) {
-                    throw new Error(data.message || data.error || ('HTTP ' + response.status));
-                }
-                return data;
-            });
-        })
-        .then(function (data) {
-            // Falls Plenty oder ein Proxy die Nutzdaten in "data" kapselt, automatisch entpacken.
-            if (data && data.data && typeof data.data === 'object' && !Array.isArray(data.data)) {
-                data = data.data;
-            }
-
-            // Eine erfolgreiche HTTP-Antwort ohne unsere erwarteten Felder ist kein gueltiges Ergebnis.
-            if (!data || typeof data !== 'object' || typeof data.ok === 'undefined') {
-                throw new Error('Ungueltige Antwort vom Plugin-Endpunkt: ' + JSON.stringify(data));
-            }
-
-            statusBox.className = 'status ' + (data.ok ? 'ok' : 'err');
-            statusBox.textContent = data.message || (data.ok ? 'Lauf abgeschlossen.' : 'Lauf mit Fehler beendet.');
-            renderResult(data);
-        })
-        .catch(function (error) {
-            statusBox.className = 'status err';
-            statusBox.textContent = 'Fehler: ' + error.message;
-        })
-        .then(function () {
-            setBusy(false);
-        });
-    }
-
-    testBtn.addEventListener('click', function () { run('test'); });
-    liveBtn.addEventListener('click', function () { run('live'); });
+(function(){'use strict';
+var testBtn=document.getElementById('testBtn'),liveBtn=document.getElementById('liveBtn'),statusBox=document.getElementById('status'),connection=document.getElementById('connection'),resultCard=document.getElementById('resultCard'),summaryBox=document.getElementById('summary'),topBox=document.getElementById('top'),diagBox=document.getElementById('diag');
+function tokenFrom(s){if(!s)return'';var d=s.getItem('accessToken')||s.getItem('access_token');if(d){try{var p=JSON.parse(d);if(p&&p.accessToken)return p.accessToken;if(p&&p.access_token)return p.access_token}catch(e){}return d.replace(/^"|"$/g,'')}for(var i=0;i<s.length;i++){var k=s.key(i);if(!k||k.toLowerCase().indexOf('accesstoken')===-1)continue;var v=s.getItem(k);if(!v)continue;try{var q=JSON.parse(v);if(q&&q.accessToken)return q.accessToken;if(q&&q.access_token)return q.access_token;if(q&&q.token)return q.token}catch(e2){}if(v.length>40)return v.replace(/^"|"$/g,'')}return''}
+function token(){try{var t=tokenFrom(window.localStorage);if(t)return t}catch(e){}try{if(window.parent&&window.parent!==window){var t2=tokenFrom(window.parent.localStorage);if(t2)return t2}}catch(e2){}return''}
+function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function headers(){var t=token();var h={'Accept':'application/json','Content-Type':'application/json'};if(t)h.Authorization='Bearer '+t;return h}
+function parseResponse(r){return r.text().then(function(text){var data;try{data=text?JSON.parse(text):{}}catch(e){data={raw:text}}return{ok:r.ok,status:r.status,data:data,raw:text}})}
+function ping(){var t=token();if(!t){connection.className='status err';connection.textContent='Version 0.2.4 geladen, aber kein Backend-Zugriffstoken gefunden.';return}fetch(window.location.origin+'/rest/preislando-bestseller/ping',{method:'GET',headers:headers()}).then(parseResponse).then(function(x){if(x.ok&&x.data&&x.data.version==='0.2.4'){connection.className='status ok';connection.textContent='Backend-Verbindung OK – Plugin-Version '+x.data.version}else{connection.className='status err';connection.textContent='Backend-Verbindung FEHLER – HTTP '+x.status+' – '+(x.raw||JSON.stringify(x.data))}}).catch(function(e){connection.className='status err';connection.textContent='Backend-Verbindung FEHLER: '+e.message})}
+function busy(b){testBtn.disabled=b;liveBtn.disabled=b}
+function render(data,raw,httpStatus){resultCard.style.display='block';diagBox.style.display='block';diagBox.textContent='HTTP '+httpStatus+'\nROHANTWORT:\n'+(raw||JSON.stringify(data));var added=Array.isArray(data.added)?data.added:[],removed=Array.isArray(data.removed)?data.removed:[];summaryBox.innerHTML='<p><strong>Plugin-Version:</strong> '+esc(data.pluginVersion)+'<br><strong>Modus:</strong> '+(data.dryRun?'TEST – keine Tags geändert':'LIVE – Tags aktualisiert')+'<br><strong>Aufträge:</strong> '+esc(data.ordersProcessed)+'<br><strong>Positionen:</strong> '+esc(data.positionsProcessed)+'<br><strong>Varianten mit Verkäufen:</strong> '+esc(data.variationsWithSales)+'<br><strong>Top-Varianten:</strong> '+esc(data.topCount)+'<br><strong>Tag:</strong> '+esc(data.tagName)+'<br><strong>Hinzugefügt:</strong> '+esc(added.length)+'<br><strong>Entfernt:</strong> '+esc(removed.length)+'</p><p><strong>Meldung:</strong> '+esc(data.message||'')+'</p>';var top=Array.isArray(data.top)?data.top:[];if(!top.length){topBox.innerHTML='<p>Keine Top-Varianten zurückgegeben.</p>';return}var rows='';for(var i=0;i<top.length;i++)rows+='<tr><td>'+(i+1)+'</td><td>'+esc(top[i].variationId)+'</td><td>'+esc(top[i].quantity)+'</td></tr>';topBox.innerHTML='<table><thead><tr><th>Platz</th><th>Varianten-ID</th><th>Verkaufte Menge</th></tr></thead><tbody>'+rows+'</tbody></table>'}
+function run(mode){var live=mode==='live';if(live&&!window.confirm('LIVE-Lauf wirklich starten? Dabei werden Tags gesetzt und entfernt.'))return;var t=token();if(!t){statusBox.className='status err';statusBox.textContent='Kein Backend-Zugriffstoken gefunden.';return}busy(true);resultCard.style.display='none';statusBox.className='status';statusBox.textContent=live?'LIVE-Lauf läuft …':'Testlauf läuft …';var path=live?'/rest/preislando-bestseller/run-live':'/rest/preislando-bestseller/run-test';fetch(window.location.origin+path,{method:'POST',headers:headers(),body:'{}'}).then(parseResponse).then(function(x){var data=x.data;if(data&&data.data&&typeof data.data==='object'&&!Array.isArray(data.data))data=data.data;if(!data||typeof data!=='object'){throw new Error('Keine JSON-Antwort. HTTP '+x.status+' – '+x.raw)}statusBox.className='status '+(x.ok&&data.ok?'ok':'err');statusBox.textContent=(data.message||('HTTP '+x.status));render(data,x.raw,x.status)}).catch(function(e){statusBox.className='status err';statusBox.textContent='Fehler: '+e.message}).then(function(){busy(false)})}
+testBtn.addEventListener('click',function(){run('test')});liveBtn.addEventListener('click',function(){run('live')});ping();
 })();
 </script>
 </body>
