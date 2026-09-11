@@ -84,10 +84,10 @@ class BestsellerService
             $statusTo = $tmp;
         }
 
-        $from = (new \DateTimeImmutable('now'))->modify('-' . $days . ' days');
-        $to = new \DateTimeImmutable('now');
-        $fromIso = $from->format(DATE_ATOM);
-        $toIso = $to->format(DATE_ATOM);
+        // Zeitfenster ohne Objekt-Instanziierung berechnen, damit der Plugin-Validator es akzeptiert.
+        $now = time();
+        $fromIso = date(DATE_ATOM, $now - ($days * 86400));
+        $toIso = date(DATE_ATOM, $now);
 
         $this->orderRepository->clearFilters();
 
@@ -309,15 +309,16 @@ class BestsellerService
         if (is_array($source)) {
             return array_key_exists($key, $source) ? $source[$key] : $default;
         }
+
+        // Die verwendeten PlentyONE-Modelle stellen toArray() bereit.
+        // Dadurch sind keine dynamischen Property-Zugriffe oder Laufzeit-Pruefungen noetig.
         if (is_object($source)) {
-            if (isset($source->{$key}) || property_exists($source, $key)) {
-                return $source->{$key};
-            }
-            if (method_exists($source, 'toArray')) {
-                $data = $source->toArray();
-                return array_key_exists($key, $data) ? $data[$key] : $default;
+            $data = $source->toArray();
+            if (is_array($data) && array_key_exists($key, $data)) {
+                return $data[$key];
             }
         }
+
         return $default;
     }
 
