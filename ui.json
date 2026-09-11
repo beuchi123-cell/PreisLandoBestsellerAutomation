@@ -1,12 +1,12 @@
 {
-  "defaultEntryPoint": "index.html",
+  "defaultEntryPoint": "index-v022.html",
   "namespace": "PreisLandoBestsellerAutomation",
   "menuEntries": [
     {
-      "label": "PreisLando Bestseller",
+      "label": "PreisLando Bestseller 0.2.2",
       "menu": "start",
-      "urlKey": "preislando-bestseller",
-      "entryPoint": "index.html"
+      "urlKey": "preislando-bestseller-022",
+      "entryPoint": "index-v022.html"
     }
   ]
 }
