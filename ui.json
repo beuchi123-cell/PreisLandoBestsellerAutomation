@@ -5,7 +5,7 @@
     {
       "label": "PreisLando Bestseller",
       "menu": "start",
-      "urlKey": "preislando-bestseller",
+      "urlKey": "preislando-bestseller-v2",
       "entryPoint": "index.html"
     }
   ]
