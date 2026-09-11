@@ -1,0 +1,73 @@
+[
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.enabled",
+    "label": "Automatik aktiv",
+    "type": "dropdown",
+    "possibleValues": {
+      "0": "Nein",
+      "1": "Ja"
+    },
+    "default": "0"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.dryRun",
+    "label": "Testmodus (keine Tags aendern)",
+    "type": "dropdown",
+    "possibleValues": {
+      "1": "Ja",
+      "0": "Nein"
+    },
+    "default": "1"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.days",
+    "label": "Auswertungszeitraum in Tagen",
+    "type": "text",
+    "default": "30"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.topCount",
+    "label": "Anzahl Bestseller-Varianten",
+    "type": "text",
+    "default": "30"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.statusFrom",
+    "label": "Auftragsstatus von",
+    "type": "text",
+    "default": "5.0"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.statusTo",
+    "label": "Auftragsstatus bis",
+    "type": "text",
+    "default": "7.0"
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.excludedStatuses",
+    "label": "Status ausschliessen (Komma getrennt, optional)",
+    "type": "text",
+    "default": ""
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.referrerIds",
+    "label": "Auftragsherkuenfte (Komma getrennt, leer = alle)",
+    "type": "text",
+    "default": ""
+  },
+  {
+    "tab": "Bestseller Automatik",
+    "key": "bestseller.tagName",
+    "label": "Tag-Name",
+    "type": "text",
+    "default": "Bestseller"
+  }
+]
